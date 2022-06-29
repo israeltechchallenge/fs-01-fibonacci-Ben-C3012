@@ -41,10 +41,8 @@ input[type=number] {
   left: 10px;
 }
 
-#select {
-   width: 10rem;
-}
-
-#theFib {
-   width: 190px;
-}
+ #theFib {
+   width: 11.4rem;
+   transform: translateX(3px);
+} 
+ 

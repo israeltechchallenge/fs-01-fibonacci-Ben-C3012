@@ -27,7 +27,7 @@ hideSpinner()
 
 
 function calcFibo(e) {
-
+    
     if (userInput.value === '') return
     userInput.style.borderColor = 'black'
     hideError()
@@ -35,6 +35,7 @@ function calcFibo(e) {
 
     if (number > 50) {
         showError()
+        result.innerText = ''
         return
     }
 
@@ -45,7 +46,18 @@ function calcFibo(e) {
 
     // Fetch data from local Server
     fetch(`http://localhost:5050/fibonacci/${number}`)
-        .then(data => data.json())
+
+
+        .then(data => {
+            if(!data.ok) {
+                data.text().then(data => {
+                    result.innerHTML = `error : ${data}`
+                    throw new Error(data) 
+
+                })
+            }
+            return data.json()
+        })
         .then(res => {
             console.log(res);
 
@@ -60,7 +72,7 @@ function calcFibo(e) {
         })
 
         .catch(err => {
-            console.error(err)
+            console.log(err)
             presentError42()
             hideSpinner()
         })
@@ -108,15 +120,21 @@ function presentError42() {
     result.style.fontWeight = '400'
     result.style.color = '#D9534F'
     result.style.fontSize = '14px'
-    result.textContent = 'Server Error: 42 is the meaning of life'
+    // result.textContent = 'Server Error: 42 is the meaning of life'
     result.style.textDecoration = 'none'
 
 }
 
 
+
+
 // MILESTONE 6
 
 function getResults() {
+
+
+
+ 
     fetch(`http://localhost:5050/getFibonacciResults `)
         .then(data => data.json())
         .then(res => {
@@ -129,32 +147,33 @@ function getResults() {
                 return 0;
             })
 
-            // console.log(sorted);
-            const arr = []
-            for (let i = 120; i < sorted.length; i++) {
-                // console.log(sorted[i]);
 
+            clearList()
 
-                const HTML = `<span id="mySpan"  class="fs-5-text border-bottom  border-secondary mt-4">The Fibonnaci Of <b>${sorted[i].number}</b> is <b>${sorted[i].result}</b>. Calculated at: ${(new Date(sorted[i].createdDate)).toString()} <br> </span>`
+            for (let i = 0; i < sorted.length; i++) {
+
+                console.log(i);
+
+                const HTML = `<span class="fs-4  pb-2    border-bottom  border-secondary  mt-5 lh-lg">The Fibonnaci Of <b>${res.results[i].number}</b> is <b>${res.results[i].result}</b>. Calculated at: ${(new Date(res.results[i].createdDate)).toString()} <br> </span>`
 
                 resultsContainer.insertAdjacentHTML("beforeend", HTML)
             }
 
-            // console.table(arr.sort());
 
 
+            // const HTML = `<span id="mySpan"  class="fs-5-text border-bottom  border-secondary pb-3 mt-4">The Fibonnaci Of <b>${sorted[i].number}</b> is <b>${sorted[i].result}</b>. Calculated at: ${(new Date(sorted[i].createdDate)).toString()} <br> </span>`
 
 
         })
+
+        .catch(err => console.log(err))
+
 
 
 }
 
 
 
-
-
-// Milestone 7 
 
 
 // Milestone 7 
@@ -183,9 +202,9 @@ form.addEventListener('submit', (e) => {
     // BOX UNCHECKED
     if (!checkBox.checked) {
 
-       
-       
-     
+
+
+
         hideError()
         fibonacci(userInput.value)
 
@@ -233,32 +252,13 @@ const fibonacci = n => {
 
 
 
-// 7.1 Geekout 
+function clearList() {
 
-// select.addEventListener('change', (e) => {
-//     console.log(e.target.value)
-//     const selectValue = e.target.value
-//     const spans = document.querySelectorAll('#mySpan')
-
-
-//     switch (selectValue) {
-//         case 'dateDes':
-//            const reverse =  Array.from(spans).reverse()
-//             for(let i of spans) {
-//                 console.log(i);
-//                 const HTML = `<span id="mySpan"  class="fs-5-text border-bottom  border-secondary mt-4">The Fibonnaci Of <b>${sorted[i].number}</b> is <b>${sorted[i].result}</b>. Calculated at: ${(new Date(sorted[i].createdDate)).toString()} <br> </span>`
-
-//             }
-//             break
-
-
-
-//     }
+    resultsContainer.innerHTML = ' '
 
 
 
 
-// })
-
+}
 
 
