@@ -15,7 +15,6 @@ hideError()
 
 
 // Event Listerners
-// isButton.addEventListener('click', calcFibo)
 
 
 // Hide Spinner On Default
@@ -27,15 +26,16 @@ hideSpinner()
 
 
 function calcFibo(e) {
-    
+
     if (userInput.value === '') return
     userInput.style.borderColor = 'black'
     hideError()
+
     const number = userInput.value
 
     if (number > 50) {
         showError()
-        result.innerText = ''
+        errorMessage.innerHTML = ''
         return
     }
 
@@ -49,17 +49,24 @@ function calcFibo(e) {
 
 
         .then(data => {
-            if(!data.ok) {
+            if (!data.ok) {
                 data.text().then(data => {
                     result.innerHTML = `error : ${data}`
-                    throw new Error(data) 
+                    presentError42()
+                    throw new Error(data)
+
 
                 })
             }
+
+
             return data.json()
         })
+
+
         .then(res => {
             console.log(res);
+
 
             result.style.color = 'black'
             result.textContent = res.result
@@ -69,11 +76,11 @@ function calcFibo(e) {
             hideSpinner()
             getResults()
 
+
         })
 
         .catch(err => {
             console.log(err)
-            presentError42()
             hideSpinner()
         })
 
@@ -120,9 +127,13 @@ function presentError42() {
     result.style.fontWeight = '400'
     result.style.color = '#D9534F'
     result.style.fontSize = '14px'
-    // result.textContent = 'Server Error: 42 is the meaning of life'
     result.style.textDecoration = 'none'
 
+}
+
+
+function hideError42() {
+    result.innerHTML = ''
 }
 
 
@@ -134,7 +145,7 @@ function getResults() {
 
 
 
- 
+
     fetch(`http://localhost:5050/getFibonacciResults `)
         .then(data => data.json())
         .then(res => {
@@ -187,15 +198,24 @@ form.addEventListener('submit', (e) => {
     // console.log(checkBox.checked)
 
     if (userInput.value === '') return
-    userInput.style.borderColor = 'black'
-    result.style.textDecoration = 'underline'
-    result.style.fontSize = '25px'
-    result.style.fontWeight = 'bold'
+
+    if (!userInput.value === 42) {
+        userInput.style.borderColor = 'black'
+        result.style.textDecoration = 'underline'
+        result.style.fontSize = '25px'
+        result.style.fontWeight = 'bold'
+
+    }
+
     hideError()
+
+
+
     const number = userInput.value
 
     if (number > 50) {
         showError()
+        result.innerHTML = ''
         return
     }
 
@@ -260,5 +280,7 @@ function clearList() {
 
 
 }
+
+
 
 
